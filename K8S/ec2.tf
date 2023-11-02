@@ -1,8 +1,20 @@
 # configured aws provider with proper credentials
 provider "aws" {
   region  = "us-east-1"
-  profile = "yusuf"
+  profile = "sheyi"
 }
+
+# Create a remote backend for your terraform 
+terraform {
+  backend "s3" {
+    bucket         = "sheyi-docker-tstate"
+    dynamodb_table = "app-state"
+    key            = "LockID"
+    region         = "us-east-1"
+    profile        = "sheyi"
+  }
+}
+
 
 
 # create default vpc if one does not exit
@@ -126,8 +138,8 @@ resource "aws_instance" "ec2_instance" {
   instance_type          = "t2.medium"
   subnet_id              = aws_default_subnet.default_az1.id
   vpc_security_group_ids = [aws_security_group.ec2_security_group2.id]
-  key_name               = "devopskeypair"
-  user_data = "${file("install_k8s.sh")}"
+  key_name               = "cloudconvokey"
+  user_data              = file("install_k8s.sh")
   count                  = 3
 
   tags = {
@@ -158,5 +170,5 @@ resource "aws_instance" "ec2_instance" {
 # }
 # print the url of the container
 output "container_url" {
- value = ["${aws_instance.ec2_instance.*.public_ip}"]
+  value = ["${aws_instance.ec2_instance.*.public_ip}"]
 }

@@ -1,7 +1,7 @@
 # configured aws provider with proper credentials
 provider "aws" {
   region  = "us-east-1"
-  profile = "yusuf"
+  profile = "sheyi"
 }
 
 
@@ -137,10 +137,10 @@ resource "aws_instance" "ec2_instance" {
     type        = "ssh"
     user        = "ec2-user"
     private_key = file("~/Downloads/devopskeypair.pem")
-    host = self.public_ip
-# an empty resource block
+    host        = self.public_ip
+    # an empty resource block
 
-}
+  }
 
   provisioner "file" {
     source      = "install_k8s.sh"
@@ -150,12 +150,12 @@ resource "aws_instance" "ec2_instance" {
 
   provisioner "remote-exec" {
     inline = [
-        "sudo chmod +x /tmp/install_k8s.sh",
-        "sudo su -c'bash /tmp/install_k8s.sh'",
+      "sudo chmod +x /tmp/install_k8s.sh",
+      "sudo su -c'bash /tmp/install_k8s.sh'",
     ]
   }
 }
 # print the url of the container
 output "container_url" {
- value = ["${aws_instance.ec2_instance.*.public_ip}"]
+  value = ["${aws_instance.ec2_instance.*.public_ip}"]
 }
