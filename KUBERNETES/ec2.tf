@@ -4,6 +4,18 @@ provider "aws" {
   profile = "sheyi"
 }
 
+# Create a remote backend for your terraform 
+terraform {
+  backend "s3" {
+    bucket         = "sheyi-docker-tstate"
+    dynamodb_table = "app-state"
+    key            = "LockID"
+    region         = "us-east-1"
+    profile        = "sheyi"
+  }
+}
+
+
 
 # create default vpc if one does not exit
 resource "aws_default_vpc" "default_vpc" {
@@ -126,7 +138,7 @@ resource "aws_instance" "ec2_instance" {
   instance_type          = "t2.medium"
   subnet_id              = aws_default_subnet.default_az1.id
   vpc_security_group_ids = [aws_security_group.ec2_security_group.id]
-  key_name               = "devopskeypair"
+  key_name               = "cloudconvokey"
   count                  = 3
 
   tags = {
@@ -136,7 +148,7 @@ resource "aws_instance" "ec2_instance" {
   connection {
     type        = "ssh"
     user        = "ec2-user"
-    private_key = file("~/Downloads/devopskeypair.pem")
+    private_key = file("~/Downloads/cloudconvobootcamp/cloudconvokey.pem")
     host        = self.public_ip
     # an empty resource block
 
