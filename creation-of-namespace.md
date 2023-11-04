@@ -15,13 +15,13 @@ To create a custom namespace,
 we will create a YAML file and deploy it.
 The content of the YAML file is shown below.
 YAML file name -namespace.yaml
-In this YAML file, 
+In this YAML file,
 
 cat > namespace.yaml << EOF
 apiVersion: v1
 kind: Namespace
 metadata:
-   name: demonamespace
+name: demonamespace
 EOF
 
 Namespace is being created specified by the kind section and the name of the custom namespace is ‘demo namespace’ as specified by the name section.
@@ -36,12 +36,13 @@ kubectl get namespaces
 Step 3–
 Deploying a Pod under the custom namespace created
 You can create Kubernetes resources under the namespace created in the previous step.
- The below command creates a Pod under the custom namespace created in the previous step.
+The below command creates a Pod under the custom namespace created in the previous step.
 kubectl run ns-pod --image=nginx --port=80 -n demonamespace
 Command Syntax –
+
 kubectl run <pod-name> --image=<img-name> --port=<port-no> -n <namespace-where-pod-is-to-be-deployed>
 To view the Pods created in the custom namespace given the below command
- kubectl get pods --namespace demonamespace
+kubectl get pods --namespace demonamespace
 Command Syntax –
 kubectl get pods –namespace <namespace-name>
 
